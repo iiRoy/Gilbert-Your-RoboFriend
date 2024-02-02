@@ -81,7 +81,7 @@ move			{ appendToSentence(yytext); verify = 1; return MOVE; }
 
 turn 				{ appendToSentence(yytext); verify = 1; return TURN; }
 
-<INITIAL>project			{ appendToSentence(yytext); verify = 1; return PROJECT; }
+project			{ appendToSentence(yytext); verify = 1; return PROJECT; }
 
 degrees |
 "°"				{ appendToSentence(yytext); verify = 1; return DEGREES; }
