@@ -49,7 +49,7 @@ int verify = 0;
 %%
 <INITIAL>[ \t] |
 <WILL>[ \t] |
-<MIND>[ \t] 			{ appendToSentence(yytext); /* Ignora espacios en blanco */ }
+<MIND>[ \t]		{ appendToSentence(yytext); /* Ignora espacios en blanco */ }
 
 ","			{ appendToSentence(yytext); verify = 1; return COMMA; }
 
@@ -59,8 +59,6 @@ int verify = 0;
 
 "!"			{ appendToSentence(yytext); verify = 1; return EXCLA; }
 
-";"			{ appendToSentence(yytext); verify = 1; return SEMICOL; }
-
 Robot |
 Gilbert |
 Gentleman		{ appendToSentence(yytext); verify = 1; return ROBOT; }
@@ -69,7 +67,6 @@ please |
 kindly			{ appendToSentence(yytext); verify = 1; return ASKING; }
 
 mind			{ appendToSentence(yytext); verify = 1; BEGIN(MIND); }		
-
 <MIND>to		{ appendToSentence(yytext); verify = 1; BEGIN(INITIAL); return ASKING; }
 
 pretty 			{ appendToSentence(yytext); verify = 1; return KINDLY; }
@@ -78,14 +75,13 @@ will |
 would |
 can |
 could				{ appendToSentence(yytext); verify = 1; BEGIN(WILL); }
-
 <WILL>you 		{ appendToSentence(yytext); verify = 1; BEGIN(INITIAL); return PETITION; }
 
 move			{ appendToSentence(yytext); verify = 1; return MOVE; }
 
 turn 				{ appendToSentence(yytext); verify = 1; return TURN; }
 
-project			{ appendToSentence(yytext); verify = 1; return PROJECT; }
+<INITIAL>project			{ appendToSentence(yytext); verify = 1; return PROJECT; }
 
 degrees |
 "°"				{ appendToSentence(yytext); verify = 1; return DEGREES; }
@@ -106,7 +102,7 @@ around 				{ appendToSentence(yytext); verify = 1; return DIREC_AROUND; }
 
 [1]					{ appendToSentence(yytext); verify = 1; return SINGLE; }
 
-[0-9]+				{ appendToSentence(yytext); verify = 1; return NUM; }
+[0-9]+				{ appendToSentence(yytext); yylval = atoi(yytext); verify = 1; return NUM; }
 
 blocks |
 spaces			{ appendToSentence(yytext); verify = 1; return PLU_BLOCKS; }

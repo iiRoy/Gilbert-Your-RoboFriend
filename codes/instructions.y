@@ -24,21 +24,31 @@
 #include <stdlib.h>
 
 extern FILE *yyin;
-extern FILE *outputFile;
+FILE *fd = NULL;
+FILE *file = NULL;
 
 extern char *fullSentence;
 extern int verify;
 char *description = NULL;
+char *instructions=NULL;
 void yyerror(const char *s);
 int yylex(void);
 
-
-char* verb = "";
+char choice[10];
+char *verb = "";
+char *show_direc = "";
 int value = 0;
 int set = 0;
 int printing = 1;
+int direction = 0;
+int logs = 0;
+char *value_char = NULL;
 
-// Function to safely append text to fullSentence
+void title(){
+printf("\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█\n\t█░░▄▀░░░░░░░░░░█░░░░▄▀░░░░█░░▄▀░░█████████░░▄▀░░░░░░▄▀░░███░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███░░░░░░▄▀░░░░░░█\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░██░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░░░░░███░░▄▀░░███░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█████████░░▄▀░░█████\n\t█░░▄▀░░░░░░▄▀░░█░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░░░░░█████░░▄▀░░█████\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█████░░▄▀░░█████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░░░░░█████░░░░░░█████\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\n\n");
+}
+
+// Function to safely append text to Description
 	void appendToDescription(const char *text) {
 		if (text == NULL) return;
         
@@ -50,14 +60,135 @@ int printing = 1;
 		}
 		strcat(description, text);
     	}
+
+// Function to safely append text to Instructions
+	void appendToInstructions(const char *text) {
+		if (text == NULL) return;
+        
+		size_t newLenInst = strlen(instructions) + strlen(text) + 1;
+		instructions = (char *)realloc(instructions, newLenInst * sizeof(char));
+		if (instructions == NULL) {
+			perror("Failed to reallocate memory");
+			exit(1);
+		}
+		strcat(instructions, text);
+    	}
+
+// Function to detect direction
+	void directioning(int direc){	
+		direc = direc % 4;
+		if (direc == 0) {
+			show_direc =  "north.";
+		}	
+		if (direc == 1) {
+			show_direc = "east.";
+		}	
+		if (direc == 2) {
+			show_direc = "south.";
+		}	
+		if (direc == 3) {
+			show_direc = "west.";
+		}
+		appendToDescription("Facing ");
+		appendToDescription(show_direc);
+		appendToDescription("\n");
+	}
+
+//Function to save an instruction
+	void save(char *define, int measure) {
+		verb = define;		
+		value = measure;
+		value_char = (char *)malloc(sizeof(char) * 12); // Asegúrate de definir un tamaño adecuado para BUFFER_SIZE
+		if (!value_char) {
+    			perror("Failed to allocate memory");
+    			exit(1);
+		}
+		sprintf(value_char, "%d ", value);
+		appendToInstructions(verb);
+		appendToInstructions(value_char);
+		if (verb == "TURN, ") {
+			appendToDescription("Turning ");
+			appendToDescription(value_char);
+			appendToDescription("°.\n");			
+			if (value == 90){
+				direction += 1;
+				directioning(direction);
+			}
+			if (value == 180){
+				direction += 2;
+				directioning(direction);
+			}
+			if (value == 270){
+				direction += 3;
+				directioning(direction);
+			}
+			if (value == 360){
+				direction += 4;
+				directioning(direction);
+			}		
+		}
+		if (verb == "MOV, ") {		
+			appendToDescription("Moving ");
+			appendToDescription(value_char);
+			if (value == 1){
+				appendToDescription("block.\n");			
+			}
+			else {
+				appendToDescription("blocks.\n");
+			}
+		}
+	} 
+
+	void toFile(char *instructions) {
+		
+		file = fopen("instructions.asm", "a");
+		
+    		if (file == NULL) {
+        		perror("Error opening file");
+        		return;
+    		}
+
+    		int wordCount = 0;
+    		char *token = strtok(instructions, " ");  // Tokenize the string by spaces
+
+    		while (token != NULL) {
+        		fprintf(file, "%s ", token);  // Write the word to the file
+        		wordCount++;
+
+        	if (wordCount == 2) {
+            		fprintf(file, "\n");  // Insert a newline after every two words
+            		wordCount = 0;
+        	}
+
+        	token = strtok(NULL, " ");  // Get the next token
+    		}
+		fclose(file);  // Cerrar el archivo si está abierto
+	}
+
+	void result() {
+		if (printing == 1) {	
+			printf("\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
+			memset(fullSentence, 0, sizeof(fullSentence)); 
+		}
+												
+		if (logs == 1 && set == 1) {	
+			printf("\033[1;35m%s\033[1;0m", description); 
+			memset(description, 0, sizeof(description));
+		}
+
+		if (set == 1) {
+			toFile(instructions);		
+			printf("\033[1;32mI understood your whole petition loud and clearly. I will do it as you wished!\033[1;0m\n");	
+			memset(instructions, 0, sizeof(instructions)); 
+		} 
+		else {
+			printf("\033[1;31mSorry. I didn't understand you. Could you repeat?\n"); 
+			memset(instructions, 0, sizeof(instructions)); 
+		}	
+	}
 %}
 
 /* 	IDENTIFICADORES     */ 
-
-%union {
-    char *dir;
-}
-
 
 %token ROBOT PETITION DEGREES FRONT BACK ASKING COMMA PERIOD QUEST EXCLA SEMICOL KINDLY MOVE PROJECT TURN SINGLE NUM PLU_BLOCKS SING_BLOCKS DIREC_90 DIREC_180 DIREC_270 DIREC_360  DIREC_LEFT DIREC_RIGHT DIREC_AROUND CONJ_THEN CONJ_ALSO CONJ_AND EOL OTHER
 %start INPUT
@@ -72,40 +203,25 @@ INPUT: 					/* Espacio en blanco */
 	    					| INPUT EOL { set = 0; }
             					| INPUT SENTENCE { 	
 												set=1; 
-												if (printing == 1) {	
-													printf("\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
-													memset(fullSentence, 0, sizeof(fullSentence)); 
-												}												
-												printf("\033[1;35m%s\033[1;0m", description); 
-												memset(description, 0, sizeof(description)); 
-												printf("\033[1;32mI understood your whole petition loud and clearly and I will do it as you wished!\033[1;0m\n\033[1;36mAnything else I can help you with?\033[1;0m\n\n\n"); 
+												result(); 
+												printf("\033[1;36mAnything else I can help you with?\033[1;0m\n\n\n");
 												}
 	    					| INPUT error EOL { 
 												set=0;
-												if (printing == 1) {	
-													printf("\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
-													memset(fullSentence, 0, sizeof(fullSentence)); 
-												}	
-												printf("\033[1;35m%s\033[1;0m", description); 
-												memset(description, 0, sizeof(description)); 					
-												yyerrok; 
-												yyclearin;
-												printf("\033[1;31mSorry... There was a part of your sentence I didn't understand. If there's any actions I mentioned, there's \nRemember to talk nicely to me, and to use proper grammar for better understanding.\nIf you think this is a mistake, I encourage you to check the file named 'README.md' for more information.\033[1;0m\n\033[1;36mAnything else I can help you with?\033[1;0m\n\n\n"); 
-												verify = 0;												
+												result();
+												verify = 0;		
+												printf("\033[1;36mAnything else I can help you with?\033[1;0m\n\n\n");										
 												}
             					;
 
 SENTENCE: 				NOUN_PHRASE VERB_PHRASE //{ printf("SENTENCE\n"); }
     						;
 
-NOUN_PHRASE : 			CMPLX_NOUN //{ printf("NOUN_PHRASE\n"); }
-    						;
-
 VERB_PHRASE : 			VERB SIGN//{ printf("VERB_PHRASE\n"); }
     						| VERB CONJ_PHRASE  //{ printf("VERB_PHRASE\n"); }
     						;
 
-CMPLX_NOUN : 			ROBOT ASK //{ printf("CMPLX_NOUN\n"); }
+NOUN_PHRASE : 			ROBOT ASK //{ printf("CMPLX_NOUN\n"); }
     						| ROBOT COMMA ASK //{ printf("CMPLX_NOUN\n"); }
 						;
 
@@ -123,34 +239,33 @@ VERB : 					MOVING //{ appendToDescription("I will move "); appendToDescription(
 PROJECTING :			PROJECT { appendToDescription("Projecting position...\n"); }
 						;
 
-MOVING : 				MOVE BLOCKS { verb = "MOV"; /*printf("MOVING\n");*/ }
-		 				| MOVE { verb = "MOV"; value = 1; }
-						| MOVE TO 
-						| MOVE BLOCKS TO 
-						| MOVE TO BLOCKS
+MOVING : 				MOVE BLOCKS { save("MOV, ", set); }
+		 				| MOVE { save("MOV, ", 1); }
+						| MOVE BACK { save("TURN, ", 180); save("MOV, ", 1); save("TURN, ", 180); }
+						| MOVE BLOCKS BACK { save("TURN, ", 180); save("MOV, ", set); save("TURN, ", 180); }
+						| MOVE BACK BLOCKS { save("TURN, ", 180); save("MOV, ", set); save("TURN, ", 180); }
+						| MOVE FRONT { save("MOV, ", 1); }
+						| MOVE BLOCKS FRONT { save("MOV, ", set); }
+						| MOVE FRONT BLOCKS { save("MOV, ", set); }
     						;
 
-TO:						FRONT 
-						| BACK
-						;
-
-TURNING : 				TURN DIRECTION { verb = "TURN"; /*printf("TURNING\n");*/ }
-		   				| TURN { verb = "TURN"; value = 90; }
+TURNING : 				TURN DIRECTION //{ printf("TURNING\n"); } 
+		   				| TURN { save("TURN, ", 90); /*printf("TURNING\n");*/ }
     						;
 
-BLOCKS : 				SINGLE SING_BLOCKS { value = 1; /*printf("1 SPACE");*/ }
-						| NUM PLU_BLOCKS { value = NUM; /*printf("# SPACES");*/ }
-						| SINGLE { value = 1; /*printf("1");*/ }
-						| NUM { value = NUM; /*printf("#");*/ }
+BLOCKS : 				SINGLE SING_BLOCKS { set = 1; /*printf("1 SPACE");*/ }
+						| NUM PLU_BLOCKS { set = $1; /*printf("# SPACES");*/ }
+						| SINGLE { set = 1; /*printf("1");*/ }
+						| NUM { set = $1; /*printf("#");*/ }
 						;
 
-DIRECTION : 				DIREC_RIGHT { value = 90; /*printf("DIREC_RIGHT\n");*/ } 
-		     				| DIREC_AROUND { value = 180; /*printf("DIREC_AROUND\n");*/ }
-		     				| DIREC_LEFT { value = 270; /*printf("DIREC_LEFT\n");*/ }
-						| DIREC_90 DEGREES { value = 90; /*printf("DIREC_RIGHT\n");*/ } 
-						| DIREC_180 DEGREES { value = 90; /*printf("DIREC_RIGHT\n");*/ } 
-						| DIREC_270 DEGREES { value = 270; /*printf("DIREC_LEFT\n");*/ }
-						| DIREC_360 DEGREES { value = 360; /*printf("DIREC_LEFT\n");*/ }
+DIRECTION : 				DIREC_RIGHT { save("TURN, ", 90); /*printf("DIREC_RIGHT\n");*/ } 
+		     				| DIREC_AROUND { save("TURN, ", 180); /*printf("DIREC_AROUND\n");*/ }
+		     				| DIREC_LEFT { save("TURN, ", 270); /*printf("DIREC_LEFT\n");*/ }
+						| DIREC_90 DEGREES { save("TURN, ", 90); /*printf("DIREC_RIGHT\n");*/ } 
+						| DIREC_180 DEGREES { save("TURN, ", 180); /*printf("DIREC_RIGHT\n");*/ } 
+						| DIREC_270 DEGREES { save("TURN, ", 270); /*printf("DIREC_LEFT\n");*/ }
+						| DIREC_360 DEGREES { save("TURN, ", 360); /*printf("DIREC_LEFT\n");*/ }
 		     				;
 
 CONJ_PHRASE: 			COMMA CONJ_THEN VERB_PHRASE //{printf("CONJ_THEN\n");}
@@ -173,47 +288,59 @@ SIGN :					PERIOD
 void yyerror(const char *s) {
 }
 
-/* 	PROGRAMA PRINCIPAL     */ 
-
-void title(){
-
-printf("\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█\n\t█░░▄▀░░░░░░░░░░█░░░░▄▀░░░░█░░▄▀░░█████████░░▄▀░░░░░░▄▀░░███░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███░░░░░░▄▀░░░░░░█\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░██░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░░░░░███░░▄▀░░███░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█████████░░▄▀░░█████\n\t█░░▄▀░░░░░░▄▀░░█░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░░░░░█████░░▄▀░░█████\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█████░░▄▀░░█████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░░░░░█████░░░░░░█████\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\n");
-
+void clear(){
+// Clear the terminal screen
+#ifdef _WIN32
+        system("cls");
+#else
+	system("clear");
+#endif
 }
 
+/* 	PROGRAMA PRINCIPAL     */ 
 int main() {
-	// Clear the terminal screen
-	#ifdef _WIN32
-        	system("cls");
-	#else
-		system("clear");
-	#endif
 
-    	char choice[10];
-    	FILE *fd = NULL;
-
+	    clear();
 	    title();
-	    printf("\033[1;36mEnter '1' to read from 'instructions.txt', '2' to read from the terminal, or '0' to exit the program: \033[1;0m");
+	    printf("\033[1;36mWould you like to read action logs? Enter '1' for yes, or any other symbol for no: \033[1;0m");
 	    scanf("%9s", choice);
+	    if (strcmp(choice, "1") == 0) {
+		logs = 1;
+		printf("\033[1;32mWe will show logs... \033[1;0m\n\n");
+	    }
+	    else {
+		printf("\033[1;31mWe will not show logs... \033[1;0m\n\n");
+	     }
 	    
+	    printf("\033[1;36mEnter '1' to read from 'instructions.txt', '2' to read from the terminal, or any other symbol to exit the program: \033[1;0m");
+	    scanf("%9s", choice);
+
 	   // Allocate initial memory for the sentence and descriptions
     	   fullSentence = (char *)malloc(1024 * sizeof(char));
+	   description = (char *)malloc(1024 * sizeof(char));
+           instructions = (char *)malloc(1024 * sizeof(char));
+
     	   if (fullSentence == NULL) {
     	     	perror("Failed to allocate memory");
            	exit(1);
     	   }
     	   fullSentence[0] = '\0'; // Initialize to an empty string
 		
-	  description = (char *)malloc(1024 * sizeof(char));
 	  if (description == NULL) {
 		perror("Failed to allocate memory");
 		exit(1);
 	   }
 	   description[0] = '\0'; // Initialize to an empty string
+
+	  if (instructions == NULL) {
+		perror("Failed to allocate memory");
+		exit(1);
+	   }
+	   instructions[0] = '\0'; // Initialize to an empty string
 	
 	    if (strcmp(choice, "1") == 0) {
 	        fd = fopen("instructions.txt", "r");
-		printf("\033[1;36mReading from file... Wait a moment:\033[1;0m\n\n");
+		printf("\033[1;33mReading from file... Wait a moment:\033[1;0m\n\n\n");
 	        if (!fd) {
 	            perror("Error opening file");
 	            return -1;
@@ -221,25 +348,17 @@ int main() {
 	        yyin = fd; // Set yyin to read from the file
 	    } else if (strcmp(choice, "2") == 0) {
 		printing = 0;	        
-		printf("\033[1;36mReading from terminal. Enter your input:\033[1;0m\n\n");
+		printf("\033[1;32mReading from terminal. Enter your input:\033[1;0m\n\n\n");
 	        yyin = stdin; // Set yyin to read from standard input (terminal)
-	    } else if (strcmp(choice, "0") == 0) {
+	    } else {
 	        printf("\033[1;36mExiting... Thanks for using Gilbert!\033[1;0m\n\n");
 	        return 0;
-	    } else {
-	        printf("\033[1;31mInvalid choice. Exiting... Thanks for using Gilbert!\033[1;0m\n\n");
-	        return 1;
 	    }
 
+	file = fopen("instructions.asm", "w");
 	yyparse();
 	if (set == 0 && verify == 1){
-		if (printing == 1) {		
-			printf("\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
-			memset(fullSentence, 0, sizeof(fullSentence)); 	
-		}
-		printf("\033[1;35m%s\033[1;0m", description); 
-		memset(description, 0, sizeof(description)); 		    		
-		printf("\033[1;31mSorry... There was a part of your sentence I didn't understand. If there's any actions I mentioned, there's \nRemember to talk nicely to me, and to use proper grammar for better understanding.\nIf you think this is a mistake, I encourage you to check the file named 'README.md' for more information.\033[1;0m\n\n\n"); // Se pone este comparador ya que al finalizar todas las reglas, YACC es incapaz de devolver la regla para un error. (SOLO SE USA EN CASO DE QUE EL USUARIO USE EL ARCHIVO 'instruction.txt')
+		result(); // Se pone este comparador ya que al finalizar todas las reglas, YACC es incapaz de devolver la regla para un error. (SOLO SE USA EN CASO DE QUE EL USUARIO USE EL ARCHIVO 'instruction.txt')
 	}
 	printf("\033[1;36mExiting... Thanks for using Gilbert!\033[1;0m\n\n");
 
@@ -253,6 +372,12 @@ int main() {
 
 	free(description);
 	description = NULL;
+
+	free(instructions);
+	instructions = NULL;
+
+	free(value_char);
+	value_char = NULL;
 
 	return 0;
 }
