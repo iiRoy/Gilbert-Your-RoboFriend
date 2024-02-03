@@ -42,9 +42,11 @@ int value = 0;
 int set = 0;
 int printing = 1;
 int direction = 0;
+int projecting_lock = 0;
 int logs = 0;
 int temp = 0;
 int lock = 0;
+int num_matrix = 0;
 char *value_char = NULL;
 
 void title(){
@@ -173,15 +175,39 @@ void result() {
 		memset(fullSentence, 0, sizeof(fullSentence)); 
 	}
 	if (logs == 1 && set == 1) {	
+		if (projecting_lock == 1) {
+			projecting_lock = 2;
+			num_matrix += 1;	
+			value_char = (char *)malloc(sizeof(char) * 12);
+			if (!value_char) {
+				perror("Failed to allocate memory");
+				exit(1);
+			}
+			sprintf(value_char, "%d ", num_matrix);																	
+			appendToDescription("Projecting position in MATRIX ");
+			appendToDescription(value_char);
+			appendToDescription("...\n");
+		}
 		printf("\033[1;35m%s\033[1;0m", description); 
 		memset(description, 0, sizeof(description));
 	}
 	if (set == 1) {
-		toFile(instructions);		
+		toFile(instructions);
+		if (projecting_lock != 0) {
+			if (projecting_lock == 1){
+				num_matrix += 1;	
+			}
+			char command[100];
+			sprintf(command, "python instructions.py %d", num_matrix);
+			system(command);
+			free(value_char);
+			value_char = NULL; 
+		}		
 		printf("\033[1;32mI understood your whole petition loud and clearly. I will do it as you wished!\033[1;0m\n");	
 		printf("\033[1;36mI will be here if there's anything else you need.\033[1;0m\n\n\n");
 		memset(instructions, 0, sizeof(instructions)); 
 		lock = 0;
+		projecting_lock = 0;
 	} else {
 		printf("\033[1;31mSorry. I didn't understand you.\n");
 		printf("\033[1;36mCould you repeat your petition with a language I can understand?\033[1;0m\n\n\n");
@@ -189,6 +215,7 @@ void result() {
 		memset(description, 0, sizeof(description));
 		direction = temp;
 		lock = 0;
+		projecting_lock = 0;
 	}	
 }
 
@@ -274,7 +301,7 @@ VERB : 					MOVING 										/*{
             					;
 PROJECTING :			PROJECT 									{
 																		//printf("TOKEN: PROJECTING\n"); 
-																		appendToDescription("Projecting position...\n"); 
+																		projecting_lock = 1;
 																	}
             					;
 MOVING : 				MOVE BLOCKS 								{
