@@ -1,7 +1,7 @@
 /* 	
 	STUDENTS INFORMATION:
 	
-		YACC & LEX CODER:
+		YACC, PYTHON MATRIX & LEX CODER:
 		Rodrigo López Guerra
 		A01737437
 
@@ -19,25 +19,36 @@
 /* 	DEFINICIONES     */ 
 
 %{
+//LIBRARIES
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
 
+//FILE DEFINITION
 extern FILE *yyin;
 FILE *fd = NULL;
 FILE *file = NULL;
 
+//DYNAMIC LISTS
 extern char *fullSentence;
-extern int verify;
 char *description = NULL;
 char *instructions=NULL;
+char *value_char = NULL;
+
+//STRINGS
+char *verb = "";
+char *show_direc = "";
+
+//EXTERN VARIABLES
+extern int verify;
+
+//YACC HANDLERS
 void yyerror(const char *s);
 int yylex(void);
 
+//SELECTION VARIABLES
 char choice[10];
-char *verb = "";
-char *show_direc = "";
 int value = 0;
 int set = 0;
 int printing = 1;
@@ -47,7 +58,9 @@ int logs = 0;
 int temp = 0;
 int lock = 0;
 int num_matrix = 0;
-char *value_char = NULL;
+int up = 1;
+int right = 1;
+int difference = 0;
 
 void title(){
 
@@ -95,9 +108,10 @@ void directioning(int direc){
 	if (direc == 3) {
 		show_direc = "west.";
 	}
-	appendToDescription("Facing ");
+	appendToDescription("\033[1;34mFacing ");
 	appendToDescription(show_direc);
 	appendToDescription("\n");
+	direction = direc;
 }
 
 //Function to save an instruction
@@ -113,7 +127,7 @@ void save(char *define, int measure) {
 	appendToInstructions(verb);
 	appendToInstructions(value_char);
 	if (verb == "TURN, ") {
-		appendToDescription("Turning ");
+		appendToDescription("\033[1;35mTurning ");
 		appendToDescription(value_char);
 		appendToDescription("°.\n");		
 		if ( lock == 0 ){
@@ -137,7 +151,7 @@ void save(char *define, int measure) {
 		}		
 	}
 	if (verb == "MOV, ") {
-		appendToDescription("Moving ");
+		appendToDescription("\033[1;35mMoving ");
 		appendToDescription(value_char);
 		if (value == 1){
 			appendToDescription("block.\n");	
@@ -148,6 +162,34 @@ void save(char *define, int measure) {
 	free(value_char);
 	value_char = NULL;
 } 
+
+void revisionLimits(){
+	if (set > 0){																																										
+		if (direction == 0) {
+			up += set;
+		} if (direction == 1) {
+			right += set;
+		} if (direction == 2) {
+			up -= set;
+		} if (direction == 3) {
+			right -= set;
+		}																			
+		if ((up > 10 && direction == 0) || (up < 1 && direction == 2) || (right > 10 && direction == 1) || (right < 1 && direction == 3)) {
+			if (up > 10){ set -= up - 10; up = 10; }
+			if (right > 10){ set -= right - 10;  right = 10; }
+			if (up < 1){ set += up - 1;  up = 1; }
+			if (right < 1){ set += right - 1; right = 1; }
+			appendToDescription("\033[1;34mIt seems there's a wall on my path. I'll move as far as I can.\n");
+		} 
+		if (set == 0) {
+			appendToDescription("\033[1;31mI didn't move any blocks.\n");
+		} else {														
+			save("MOV, ", set);
+		}
+	} else {
+		appendToDescription("I didn't move any blocks.\n");
+	}			
+}
 
 void toFile(char *instructions) {
 	file = fopen("instructions.asm", "a");
@@ -184,18 +226,19 @@ void result() {
 				exit(1);
 			}
 			sprintf(value_char, "%d ", num_matrix);																	
-			appendToDescription("Projecting position in MATRIX ");
+			appendToDescription("\033[1;34mProjecting position in MATRIX ");
 			appendToDescription(value_char);
 			appendToDescription("...\n");
 		}
-		printf("\033[1;35m%s\033[1;0m", description); 
+		printf("\033[1;34m%s\033[1;0m", description); 
 		memset(description, 0, sizeof(description));
 	}
 	if (set == 1) {
 		toFile(instructions);
 		if (projecting_lock != 0) {
 			if (projecting_lock == 1){
-				num_matrix += 1;	
+				num_matrix += 1;
+				projecting_lock = 2;	
 			}
 			char command[100];
 			sprintf(command, "python instructions.py %d", num_matrix);
@@ -206,8 +249,8 @@ void result() {
 		printf("\033[1;32mI understood your whole petition loud and clearly. I will do it as you wished!\033[1;0m\n");	
 		printf("\033[1;36mI will be here if there's anything else you need.\033[1;0m\n\n\n");
 		memset(instructions, 0, sizeof(instructions)); 
+		temp = direction;		
 		lock = 0;
-		projecting_lock = 0;
 	} else {
 		printf("\033[1;31mSorry. I didn't understand you.\n");
 		printf("\033[1;36mCould you repeat your petition with a language I can understand?\033[1;0m\n\n\n");
@@ -215,7 +258,7 @@ void result() {
 		memset(description, 0, sizeof(description));
 		direction = temp;
 		lock = 0;
-		projecting_lock = 0;
+		projecting_lock = 2;
 	}	
 }
 
@@ -305,43 +348,46 @@ PROJECTING :			PROJECT 									{
 																	}
             					;
 MOVING : 				MOVE BLOCKS 								{
-																		//printf("TOKEN: MOVING\n"); 
-																		save("MOV, ", set); 
-																	}
+																		//printf("TOKEN: MOVING\n");																																			
+																		revisionLimits();																		
+																	} 
 		 				| MOVE 										{ 
 																		//printf("TOKEN: MOVING\n");
-																		save("MOV, ", 1); 
-																	}
+																		set = 1;
+																		revisionLimits();																					
+																	} 
 						| MOVE BACK 								{
 																		//printf("TOKEN: MOVING\n");
 																		save("TURN, ", 180); 
-																		save("MOV, ", 1); 
+																		set = 1;
+																		revisionLimits();																	
 																		save("TURN, ", 180); 
 																	}
 						| MOVE BLOCKS BACK 							{
 																		//printf("TOKEN: MOVING\n"); 
 																		save("TURN, ", 180); 
-																		save("MOV, ", set); 
+																		revisionLimits();		
 																		save("TURN, ", 180); 
 																	}
 						| MOVE BACK BLOCKS 							{
 																		//printf("TOKEN: MOVING\n"); 
-																		save("TURN, ", 180); 
-																		save("MOV, ", set); 
+																		save("TURN, ", 180);
+																		revisionLimits();																				
 																		save("TURN, ", 180); 
 																	}
 						| MOVE FRONT 								{
 																		//printf("TOKEN: MOVING\n");
-																		save("MOV, ", 1);
-																	}
+																		set = 1;
+																		revisionLimits();																			
+																	} 
 						| MOVE BLOCKS FRONT 						{
 																		//printf("TOKEN: MOVING\n");
-																		save("MOV, ", set); 
-																	}
+																		revisionLimits();																						
+																	} 
 						| MOVE FRONT BLOCKS 						{
 																		//printf("TOKEN: MOVING\n");
-																		save("MOV, ", set); 
-																	}
+																		revisionLimits();																			
+																	} 
             					;
 TURNING : 				TURN DIRECTION 								/*{ 
 																		printf("TOKEN: TURNING\n"); 
@@ -474,6 +520,7 @@ void handle_sigint() {
 	free(instructions);
 	instructions = NULL;
 	printf("\033[1;32m\nMemory freed.\033[1;0m\n");
+	if (projecting_lock ==2) { printf("\033[1;34mClosing every matrix created... Wait a moment...\033[1;0m\n"); }
 	printf("\033[1;36mExiting... Thanks for using Gilbert!\033[1;0m\n\n");
 	exit(0);
 }

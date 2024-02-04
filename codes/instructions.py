@@ -18,13 +18,16 @@ def create_window_with_emojis(emoji_matrix, direction):
     # Run tkinter code in a separate process
     subprocess.Popen(['python', '-c', f"""
 import tkinter as tk
-root = tk.Tk()
-root.title('GILBERT - MATRIX {num_matrix}')
-matrix_label = tk.Label(root, text="{emoji_text}", font=('Arial', 30))
-matrix_label.pack()
-direction_label = tk.Label(root, text="Gilbert is looking to the {compass_direction}", font=('Arial', 20, 'bold'))
-direction_label.pack()
-root.mainloop()
+try:
+	root = tk.Tk()
+	root.title('GILBERT - MATRIX {num_matrix}')
+	matrix_label = tk.Label(root, text="{emoji_text}", font=('Arial', 30))
+	matrix_label.pack()
+	direction_label = tk.Label(root, text="Gilbert is looking to the {compass_direction}", font=('Arial', 20, 'bold'))
+	direction_label.pack()
+	root.mainloop()
+except KeyboardInterrupt:
+	pass
 """])
 
 def parse_assembly_line(line):
@@ -68,7 +71,7 @@ def generate_matrix(instructions, matrix_size):
     return matrix, direction
 
 if __name__ == "__main__":
-    matrix_size = 12  # Adjust the matrix size as needed
+    matrix_size = 10  # Adjust the matrix size as needed
     instructions = []
 
     with open("instructions.asm", "r") as file:
