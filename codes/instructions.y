@@ -331,12 +331,8 @@ VERB : 					MOVING 										/*{
     						| TURNING 									/*{
 																		printf("TOKEN: VERB\n"); 
 																	}*/
-						| PROJECTING 								/*{
-																		printf("TOKEN: VERB\n"); 
-																	}*/
-            					;
-PROJECTING :			PROJECT 									{
-																		//printf("TOKEN: PROJECTING\n"); 
+						| PROJECT 									{
+																		//printf("TOKEN: VERB\n"); 
 																		projecting_lock = 1;
 																	}
             					;
