@@ -30,31 +30,31 @@ We can find 8 main files when we run correctly our program.
 
 ## How to use it?
 ### How to run it?
-1.- Download the files on a LINUX emulator, or a LINUX system.
-2.- Open the terminal and search the location of the downloaded files with "cd".
-3.- Run "lex instructions.l".
-4.- Run "yacc -d instructions.y".
-5.- Run "gcc -o instructions y.tab.c lex.yy.c -ll". (You can change the name of instructions to whatever you want your program to be named).
-6.- Run "./instructions". (If you changed the name of your executable, also change it to that on this step).
+1. Download the files on a LINUX emulator, or a LINUX system.
+2. Open the terminal and search the location of the downloaded files with "cd".
+3. Run "lex instructions.l".
+4. Run "yacc -d instructions.y".
+5. Run "gcc -o instructions y.tab.c lex.yy.c -ll". (You can change the name of instructions to whatever you want your program to be named).
+6. Run "./instructions". (If you changed the name of your executable, also change it to that on this step).
 
 ### How does the grammar, and alphabet works?
 When talking to Gilbert you need to be specific on what you need. Since this version can be quite limited, we invite you to improve the CFG and the alphabet of this program in order to improve the functionable features of the project.
 
 #### What's the alphabet?
-NOUNS - Gilbert, Gentleman, Robot - Ways to refer to Gilbert.
-POLITE - please, kindly, mind to, pretty please, pretty kindly, pretty mind to - Ways to be polite to Gilbert.
-PETITION - would you [POLITE], will you [POLITE], can you [POLITE] - Ways to ask something to Gilbert.
-VERBS - move, turn, project - Ways to give an order to Gilbert. Move will move either 1 (if it's not specific) or the specified spaces. Turn will turn either 90° (if it's not specific) or the specified degrees (only accepts 90°, 180°, 270°, and 360°). Project will run the CPU to visualize the orders of the bot. (Note that it will only project after an INPUT, and will project all the orders before the stated project. If you put a project in the middle of a statement, it will read all the orders of that INPUT and then project all the given orders by the moment. When closing the program, all the MATRIX created by the CPU will automatically close [this rule doesn't count in "read file" mode]).
-MOVING - QUANTITY, QUANTITY BLOCKS, QUANTITY DIRECTION, QUANTITY BLOCKS DIRECTION - The [QUANTITY] will be always numerical. The [BLOCKS] can be either defined as "block"/"space" (if there's multiple, or none number of BLOCKS to move, remember to change it to "blocks"/"spaces"). The [DIRECTION] can be either defined as "forward", "straight", or "ahead" if you want to go straight the direction Gilbert's looking, or "back", and "backward" if you want to go the opposite way the direction Gilbert's looking. (Note that we don't allow the user to put "backwards", since this program only accepts American English).
-TURNING - QUANTITY - The [QUANTITY] can be either numerical (always following the rules established on VERBS) or text. If it's a number, it should always have a "°" sign (whether it's text or symbol [ex. "90°" / "90 degrees"]. If it's a text, you should use right to turn 90°, around to turn 180°, or left to turn 360° [ex. "turn right", "turn around", "turn left"].
+- NOUNS - Gilbert, Gentleman, Robot - Ways to refer to Gilbert.
+- POLITE - please, kindly, mind to, pretty please, pretty kindly, pretty mind to - Ways to be polite to Gilbert.
+- PETITION - would you [POLITE], will you [POLITE], can you [POLITE] - Ways to ask something to Gilbert.
+- VERBS - move, turn, project - Ways to give an order to Gilbert. Move will move either 1 (if it's not specific) or the specified spaces. Turn will turn either 90° (if it's not specific) or the specified degrees (only accepts 90°, 180°, 270°, and 360°). Project will run the CPU to visualize the orders of the bot. (Note that it will only project after an INPUT, and will project all the orders before the stated project. If you put a project in the middle of a statement, it will read all the orders of that INPUT and then project all the given orders by the moment. When closing the program, all the MATRIX created by the CPU will automatically close [this rule doesn't count in "read file" mode]).
+- MOVING - QUANTITY, QUANTITY BLOCKS, QUANTITY DIRECTION, QUANTITY BLOCKS DIRECTION - The [QUANTITY] will be always numerical. The [BLOCKS] can be either defined as "block"/"space" (if there's multiple, or none number of BLOCKS to move, remember to change it to "blocks"/"spaces"). The [DIRECTION] can be either defined as "forward", "straight", or "ahead" if you want to go straight the direction Gilbert's looking, or "back", and "backward" if you want to go the opposite way the direction Gilbert's looking. (Note that we don't allow the user to put "backwards", since this program only accepts American English).
+- TURNING - QUANTITY - The [QUANTITY] can be either numerical (always following the rules established on VERBS) or text. If it's a number, it should always have a "°" sign (whether it's text or symbol [ex. "90°" / "90 degrees"]. If it's a text, you should use right to turn 90°, around to turn 180°, or left to turn 360° [ex. "turn right", "turn around", "turn left"].
 CONJUCTIONS - and, then, and then, Also - They are used to join 2 actions.
 PUNCTUATION - !, ?, ., , - Used to state either the end of a sentence, or the union of conjuctions.
 
 ### What are the grammatical rules?
-CONJUCTIONS - There's certain rules to use conjuctions. Wheather it's correct to just left the sentence without a conjuction to join 2 orders (only with a comma) [ex. "move, turn"], if we want to join them with an "and", "then", or "and then", we need to add a comma before the previous action [ex. "move, and turn" / "move, then turn" / "move, and then turn"]. If we want to use Also, we need to add a period to the previous action, as well a comma after the statement of Also [ex. "move. Also, turn"]. We are allowed to give a petition, or to be polite after an Also, however if you are not, it's fine for the bot meanwhile you are at the start of your sentence [ex. "Robot please move. Also turn." / "Robot please move. Also please turn."].
-PUNCTUATION - You should always end with a ".", "?", or "!". The program doesn't detects if it's a question, or a statement, so either of them is fine. As well, you should follow the rules stated by the conjuctions previously mentioned. As well you may or not add a comma after a NOUN.
-SPECIAL SIGNS - You may replace "and" with "&".
-SPACES - The program doesn't count any spaces, so if you put 5 of those, the robot will read it as one.
+- CONJUCTIONS - There's certain rules to use conjuctions. Wheather it's correct to just left the sentence without a conjuction to join 2 orders (only with a comma) [ex. "move, turn"], if we want to join them with an "and", "then", or "and then", we need to add a comma before the previous action [ex. "move, and turn" / "move, then turn" / "move, and then turn"]. If we want to use Also, we need to add a period to the previous action, as well a comma after the statement of Also [ex. "move. Also, turn"]. We are allowed to give a petition, or to be polite after an Also, however if you are not, it's fine for the bot meanwhile you are at the start of your sentence [ex. "Robot please move. Also turn." / "Robot please move. Also please turn."].
+- PUNCTUATION - You should always end with a ".", "?", or "!". The program doesn't detects if it's a question, or a statement, so either of them is fine. As well, you should follow the rules stated by the conjuctions previously mentioned. As well you may or not add a comma after a NOUN.
+- SPECIAL SIGNS - You may replace "and" with "&".
+- SPACES - The program doesn't count any spaces, so if you put 5 of those, the robot will read it as one.
 
 ## Example of INPUTS.
 ### Accepted INPUTS
