@@ -62,11 +62,7 @@ int up = 1;
 int right = 1;
 int difference = 0;
 
-void title(){
-
-	printf("\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█\n\t█░░▄▀░░░░░░░░░░█░░░░▄▀░░░░█░░▄▀░░█████████░░▄▀░░░░░░▄▀░░███░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███░░░░░░▄▀░░░░░░█\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░██░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░░░░░███░░▄▀░░███░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█████████░░▄▀░░█████\n\t█░░▄▀░░░░░░▄▀░░█░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░░░░░█████░░▄▀░░█████\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█████░░▄▀░░█████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░░░░░█████░░░░░░█████\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\n\n");
-
-}
+void title(){ printf("\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█\n\t█░░▄▀░░░░░░░░░░█░░░░▄▀░░░░█░░▄▀░░█████████░░▄▀░░░░░░▄▀░░███░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███░░░░░░▄▀░░░░░░█\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░██░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░░░░░███░░▄▀░░███░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█████████░░▄▀░░█████\n\t█░░▄▀░░░░░░▄▀░░█░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░░░░░█████░░▄▀░░█████\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█████░░▄▀░░█████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░░░░░█████░░░░░░█████\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\n\n"); }
 
 // Function to safely append text to Description
 void appendToDescription(const char *text) {
@@ -108,7 +104,7 @@ void directioning(int direc){
 	if (direc == 3) {
 		show_direc = "west.";
 	}
-	appendToDescription("\033[1;34mFacing ");
+	appendToDescription("\t\033[1;34mFacing ");
 	appendToDescription(show_direc);
 	appendToDescription("\n");
 	direction = direc;
@@ -127,7 +123,7 @@ void save(char *define, int measure) {
 	appendToInstructions(verb);
 	appendToInstructions(value_char);
 	if (verb == "TURN, ") {
-		appendToDescription("\033[1;35mTurning ");
+		appendToDescription("\t\033[1;35mTurning ");
 		appendToDescription(value_char);
 		appendToDescription("°.\n");		
 		if ( lock == 0 ){
@@ -151,7 +147,7 @@ void save(char *define, int measure) {
 		}		
 	}
 	if (verb == "MOV, ") {
-		appendToDescription("\033[1;35mMoving ");
+		appendToDescription("\t\033[1;35mMoving ");
 		appendToDescription(value_char);
 		if (value == 1){
 			appendToDescription("block.\n");	
@@ -179,15 +175,15 @@ void revisionLimits(){
 			if (right > 10){ set -= right - 10;  right = 10; }
 			if (up < 1){ set += up - 1;  up = 1; }
 			if (right < 1){ set += right - 1; right = 1; }
-			appendToDescription("\033[1;34mIt seems there's a wall on my path. I'll move as far as I can.\n");
+			appendToDescription("\t\033[1;34mIt seems there's a wall on my path. I'll move as far as I can.\n");
 		} 
 		if (set == 0) {
-			appendToDescription("\033[1;31mI didn't move any blocks.\n");
+			appendToDescription("\t\033[1;31mI didn't move any blocks.\n");
 		} else {														
 			save("MOV, ", set);
 		}
 	} else {
-		appendToDescription("I didn't move any blocks.\n");
+		appendToDescription("\tI didn't move any blocks.\n");
 	}			
 }
 
@@ -213,40 +209,37 @@ void toFile(char *instructions) {
 
 void result() {
 	if (printing == 1) {	
-		printf("\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
+		printf("\n\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
 		memset(fullSentence, 0, sizeof(fullSentence)); 
 	}
 	if (logs == 1 && set == 1) {	
 		if (projecting_lock == 1) {
-			projecting_lock = 2;
-			num_matrix += 1;	
+			num_matrix += 1;
 			value_char = (char *)malloc(sizeof(char) * 12);
 			if (!value_char) {
 				perror("Failed to allocate memory");
 				exit(1);
 			}
 			sprintf(value_char, "%d ", num_matrix);																	
-			appendToDescription("\033[1;34mProjecting position in MATRIX ");
+			appendToDescription("\t\033[1;34mProjecting position in MATRIX ");
 			appendToDescription(value_char);
 			appendToDescription("...\n");
+			free(value_char);
+			value_char = NULL; 
 		}
-		printf("\033[1;34m%s\033[1;0m", description); 
+		printf("%s\033[1;0m", description); 
 		memset(description, 0, sizeof(description));
 	}
 	if (set == 1) {
 		toFile(instructions);
-		if (projecting_lock != 0) {
-			if (projecting_lock == 1){
-				num_matrix += 1;
-				projecting_lock = 2;	
-			}
+		if (projecting_lock == 1) {
+			if (logs != 1) { num_matrix += 1; }			
+			projecting_lock = 2;
 			char command[100];
 			sprintf(command, "python instructions.py %d", num_matrix);
 			system(command);
-			free(value_char);
-			value_char = NULL; 
 		}		
-		printf("\033[1;32mI understood your whole petition loud and clearly. I will do it as you wished!\033[1;0m\n");	
+		if (logs == 1){ printf("\n");} printf("\033[1;32mI understood your whole petition loud and clearly. I will do it as you wished!\033[1;0m\n");	
 		printf("\033[1;36mI will be here if there's anything else you need.\033[1;0m\n\n\n");
 		memset(instructions, 0, sizeof(instructions)); 
 		temp = direction;		
@@ -258,7 +251,7 @@ void result() {
 		memset(description, 0, sizeof(description));
 		direction = temp;
 		lock = 0;
-		projecting_lock = 2;
+		if (projecting_lock !=0){ projecting_lock = 2; }
 	}	
 }
 
@@ -317,19 +310,19 @@ NOUN_PHRASE : 			ROBOT ASK 									/*{
             					;
 ASK : 					KINDLY ASKING 								{
 																		//printf("TOKEN: ASK\n");
-																		appendToDescription("Thanks for being so nice with me!\n"); 
+																		appendToDescription("\n\t\033[1;34mThanks for being so nice with me!\n"); 
 																	}
          					| ASKING 									{
 																		//printf("TOKEN: ASK\n");
-																		appendToDescription("Thanks for asking properly.\n");
+																		appendToDescription("\n\t\033[1;34mThanks for asking properly.\n");
 																	}
 	 					| PETITION KINDLY ASKING 						{
 																		//printf("TOKEN: ASK\n");
-																		appendToDescription("Thanks for being so nice with your petition!\n");
+																		appendToDescription("\n\t\033[1;34mThanks for being so nice with your petition!\n");
 																	}
 	 					| PETITION ASKING 							{
 																		//printf("TOKEN: ASK\n");
-																		appendToDescription("Thanks for giving me your petition so nicely!\n");
+																		appendToDescription("\n\t\033[1;34mThanks for giving me your petition so nicely!\n");
 																	}
             					;
 VERB : 					MOVING 										/*{
@@ -525,9 +518,7 @@ void handle_sigint() {
 	exit(0);
 }
 
-void interaction(){
-	clear();
-	title();
+void logging(){
 	printf("\033[1;36mWould you like to read action logs? Enter '1' for yes, or any other symbol for no: \033[1;0m");
 	scanf("%9s", choice);
 	if (strcmp(choice, "1") == 0) {
@@ -537,16 +528,23 @@ void interaction(){
 	else {
 		printf("\033[1;31mI will not show logs... \033[1;0m\n\n");
 	}
-	printf("\033[1;36mEnter '1' to read from 'instructions.txt', '2' to read from the terminal, or any other symbol to exit the program: \033[1;0m");
+}
+
+void interaction(){
+	clear();
+	title();
+	printf("\033[1;37mWelcome to Gilbert's menu. Please choose your desired option:\n\n\t\033[1;34m- Press '1' to run Gilbert, and define the instructions by 'instructions.txt'.\n\t- Press '2' to run Gilbert, and define the instructions by terminal.\n\t- Press any other key to exit.\n\n\033[1;0m");
+	printf("\033[1;36mYour selection: \033[1;0m");
 	scanf("%9s", choice);
 	if (strcmp(choice, "1") == 0) {
 		allocation();
 		clear();
 		title();
+		logging();
 		fd = fopen("instructions.txt", "r");
-		printf("\033[1;33mReading from file... Wait a moment:\033[1;0m\n\n\n");
+		printf("\033[1;33mReading from file... Wait a moment:\033[1;0m\n\n");
 	        if (!fd) {
-			perror("Error opening file");
+			perror("\033[1;31mError opening file.\033[1;0m");
 			exit (-1);
 	        }
 	        yyin = fd; // Set yyin to read from the file
@@ -556,6 +554,7 @@ void interaction(){
 		allocation();
 		clear();
 		title();
+		logging();
 		printing = 0;	        
 		printf("\033[1;36m\nTo end the program up, use \"CTRL + C\"\n\033[1;0m\033[1;32mReading from terminal. Enter your input:\033[1;0m\n\n\n");
 	        yyin = stdin; // Set yyin to read from standard input (terminal)
