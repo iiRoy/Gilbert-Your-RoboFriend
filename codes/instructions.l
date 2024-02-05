@@ -88,17 +88,11 @@ degrees |
 
 left 				{ appendToSentence(yytext); verify = 1; return DIREC_LEFT; }
 
-270    				{ appendToSentence(yytext); verify = 1; return DIREC_270; }
-
 right 				{ appendToSentence(yytext); verify = 1; return DIREC_RIGHT; }
-
-90   				{ appendToSentence(yytext); verify = 1; return DIREC_90; }
 
 around 				{ appendToSentence(yytext); verify = 1; return DIREC_AROUND; }
 
-180  				{ appendToSentence(yytext); verify = 1; return DIREC_180; }
-
-360				{ appendToSentence(yytext); verify = 1; return DIREC_360; }
+90|180|270|360  		{ appendToSentence(yytext); yylval = atoi(yytext); verify = 1; return DIREC_NUM; }
 
 [1]					{ appendToSentence(yytext); verify = 1; return SINGLE; }
 

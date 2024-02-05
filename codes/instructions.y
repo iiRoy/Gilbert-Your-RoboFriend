@@ -264,7 +264,7 @@ void result() {
 //VERBS AND COMPLEMENTS
 %token MOVE PROJECT TURN
 //DIRECTIONS AND QUANTITY
-%token FRONT BACK SINGLE NUM PLU_BLOCKS SING_BLOCKS DIREC_90 DIREC_180 DIREC_270 DIREC_360  DEGREES DIREC_LEFT DIREC_RIGHT DIREC_AROUND
+%token FRONT BACK SINGLE NUM PLU_BLOCKS SING_BLOCKS DIREC_NUM DEGREES DIREC_LEFT DIREC_RIGHT DIREC_AROUND
 //CONJUNCTIONS AND GRAMMAR
 %token COMMA PERIOD QUEST EXCLA CONJ_THEN CONJ_ALSO CONJ_AND EOL OTHER
 
@@ -378,9 +378,10 @@ MOVING : 				MOVE BLOCKS 								{
 																		revisionLimits();																			
 																	} 
             					;
-TURNING : 				TURN DIRECTION 								/*{ 
-																		printf("TOKEN: TURNING\n"); 
-																	}*/ 
+TURNING : 				TURN DIRECTION 								{ 
+																		//printf("TOKEN: TURNING\n"); 
+																		save("TURN, ", set);
+																	} 
 		   				| TURN 										{
 																		//printf("TOKEN: TURNING\n");
 																		save("TURN, ", 90);
@@ -405,32 +406,20 @@ BLOCKS : 				SINGLE SING_BLOCKS 							{
             					;
 DIRECTION : 				DIREC_RIGHT 								{ 
 																		//printf("TOKEN: DIREC_RIGHT\n");
-																		save("TURN, ", 90);
+																		set = 90;
 																	} 
 		     				| DIREC_AROUND 								{
 																		//printf("TOKEN: DIREC_AROUND\n");
-																		save("TURN, ", 180);
+																		set = 180;
 																	}
 		     				| DIREC_LEFT 									{
 																		//printf("TOKEN: DIREC_LEFT\n");
-																		save("TURN, ", 270); 
+																		set = 270;
 																	}
-						| DIREC_90 DEGREES 							{
+						| DIREC_NUM DEGREES 						{
 																		//printf("TOKEN: DIREC_RIGHT\n");
-																		save("TURN, ", 90);
+																		set = $1;														
 																	} 
-						| DIREC_180 DEGREES 							{
-																		//printf("TOKEN: DIREC_RIGHT\n");
-																		save("TURN, ", 180);
-																	}
-						| DIREC_270 DEGREES 							{
-																		//printf("TOKEN: DIREC_LEFT\n");
-																		save("TURN, ", 270); 
-																	}
-						| DIREC_360 DEGREES 							{
-																		//printf("TOKEN: DIREC_LEFT\n");
-																		save("TURN, ", 360);
-																	}
             					;
 CONJ_PHRASE: 			COMMA CONJ_THEN VERB_PHRASE 				/*{
 																		printf("TOKEN: CONJ_THEN\n");
