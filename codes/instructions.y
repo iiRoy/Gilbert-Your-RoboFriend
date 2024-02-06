@@ -16,7 +16,7 @@
 	YACC Syntax Interpreter
 */
 
-/* 	DEFINICIONES     */ 
+/* 	DEFINITIONS     */ 
 
 %{
 //LIBRARIES
@@ -64,7 +64,7 @@ int difference = 0;
 
 void title(){ printf("\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░█████████░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░█\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███░░▄▀▄▀▄▀▄▀▄▀░░█\n\t█░░▄▀░░░░░░░░░░█░░░░▄▀░░░░█░░▄▀░░█████████░░▄▀░░░░░░▄▀░░███░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███░░░░░░▄▀░░░░░░█\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░██░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░███████████░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░░░░░███░░▄▀░░███░░▄▀░░█████████░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░▄▀░░░░███████░░▄▀░░█████\n\t█░░▄▀░░██░░▄▀░░███░░▄▀░░███░░▄▀░░█████████░░▄▀░░████░░▄▀░░█░░▄▀░░█████████░░▄▀░░██░░▄▀░░█████████░░▄▀░░█████\n\t█░░▄▀░░░░░░▄▀░░█░░░░▄▀░░░░█░░▄▀░░░░░░░░░░█░░▄▀░░░░░░░░▄▀░░█░░▄▀░░░░░░░░░░█░░▄▀░░██░░▄▀░░░░░░█████░░▄▀░░█████\n\t█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀▄▀░░█░░▄▀▄▀▄▀▄▀▄▀░░█░░▄▀░░██░░▄▀▄▀▄▀░░█████░░▄▀░░█████\n\t█░░░░░░░░░░░░░░█░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░░░░░░░░░░░█░░░░░░░░░░░░░░█░░░░░░██░░░░░░░░░░█████░░░░░░█████\n\t████████████████████████████████████████████████████████████████████████████████████████████████████████████\n\n\n"); }
 
-// Function to safely append text to Description
+// Function to safely append text to the dynamic list description
 void appendToDescription(const char *text) {
 	if (text == NULL) return;
         size_t newLenDesc = strlen(description) + strlen(text) + 1;
@@ -76,7 +76,7 @@ void appendToDescription(const char *text) {
 	strcat(description, text);
 }
 
-// Function to safely append text to Instructions
+// Function to safely append text to the dynamic list instructions
 void appendToInstructions(const char *text) {
 	if (text == NULL) return;
 	size_t newLenInst = strlen(instructions) + strlen(text) + 1;
@@ -159,6 +159,7 @@ void save(char *define, int measure) {
 	value_char = NULL;
 } 
 
+//Function to check the limits of our Matrix
 void revisionLimits(){
 	if (set > 0){																																										
 		if (direction == 0) {
@@ -187,6 +188,7 @@ void revisionLimits(){
 	}			
 }
 
+//Function to send a variable to instructions.asm.
 void toFile(char *instructions) {
 	file = fopen("instructions.asm", "a");
 	if (file == NULL) {
@@ -194,24 +196,27 @@ void toFile(char *instructions) {
         	return;
     	}
 	int wordCount = 0;
-    	char *token = strtok(instructions, " ");  // Tokenize the string by spaces
+    	char *token = strtok(instructions, " ");
     	while (token != NULL) {
-        	fprintf(file, "%s ", token);  // Write the word to the file
+        	fprintf(file, "%s ", token);
         	wordCount++;
         	if (wordCount == 2) {
-            		fprintf(file, "\n");  // Insert a newline after every two words
+            		fprintf(file, "\n");
             		wordCount = 0;
         	}
-        	token = strtok(NULL, " ");  // Get the next token
+        	token = strtok(NULL, " ");
     	}
-	fclose(file);  // Cerrar el archivo si está abierto
+	fclose(file);
 }
 
+//Function to show the correct result of our grammar.
 void result() {
+	//Case: Read by file
 	if (printing == 1) {	
 		printf("\n\033[1;33m\"%s\"\033[1;0m\n", fullSentence); 
 		memset(fullSentence, 0, sizeof(fullSentence)); 
 	}
+	//Case: Selection of visualization of projection.
 	if (logs == 1 && set == 1) {	
 		if (projecting_lock == 1) {
 			num_matrix += 1;
@@ -230,8 +235,10 @@ void result() {
 		printf("%s\033[1;0m", description); 
 		memset(description, 0, sizeof(description));
 	}
+	//Case: Accepted state.
 	if (set == 1) {
 		toFile(instructions);
+		//Case: Matrix Printer.
 		if (projecting_lock == 1) {
 			if (logs != 1) { num_matrix += 1; }			
 			projecting_lock = 2;
@@ -244,6 +251,7 @@ void result() {
 		memset(instructions, 0, sizeof(instructions)); 
 		temp = direction;		
 		lock = 0;
+	//Case: Not accepted.
 	} else {
 		printf("\033[1;31mSorry. I didn't understand you.\n");
 		printf("\033[1;36mCould you repeat your petition with a language I can understand?\033[1;0m\n\n\n");
@@ -453,12 +461,12 @@ SIGN :					PERIOD 										/*{
 
 %%
 
-/* 	ERRORES GENERADOS     */ 
+/* 	GENERATED ERRORS     */ 
 
 void yyerror(const char *s) { }
 
+// Clear the terminal screen
 void clear(){
-	// Clear the terminal screen
 	#ifdef _WIN32
         	system("cls");
 	#else
@@ -466,6 +474,7 @@ void clear(){
 	#endif
 }
 
+//Initialization of dynamic lists.
 void allocation(){
 	// Allocate initial memory for the sentence and descriptions
 	fullSentence = (char *)malloc(1024 * sizeof(char));
@@ -488,7 +497,7 @@ void allocation(){
 	instructions[0] = '\0'; // Initialize to an empty string
 }
 
-// Signal Handler Function
+// Terminal memory cleaning system.
 void handle_sigint() {
 	// Free the allocated memory
     	free(fullSentence);
@@ -503,6 +512,7 @@ void handle_sigint() {
 	exit(0);
 }
 
+//Case: Choose your log selection
 void logging(){
 	printf("\033[1;36mWould you like to read action logs? Enter '1' for yes, or any other symbol for no: \033[1;0m");
 	scanf("%9s", choice);
@@ -515,6 +525,7 @@ void logging(){
 	}
 }
 
+//Main menu.
 void interaction(){
 	clear();
 	title();
@@ -558,7 +569,7 @@ void interaction(){
 }
 
 
-/* 	PROGRAMA PRINCIPAL     */ 
+/* 	MAIN PROGRAM     */ 
 int main() {
 	interaction();
 	// Free the allocated memory

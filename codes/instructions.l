@@ -16,28 +16,28 @@
 	Lexical Analyzer Program
 */
 
-/* 	DEFINICIONES     */ 
+/* 	DEFINITIONS     */ 
 
 %{
 #include "y.tab.h"
 char *fullSentence = NULL;
 int verify = 0;
 
-// Function to safely append text to fullSentence
-	void appendToSentence(const char *text) {
-		if (text == NULL) return;
-        
-		size_t newLen = strlen(fullSentence) + strlen(text) + 1;
-		fullSentence = (char *)realloc(fullSentence, newLen * sizeof(char));
-		if (fullSentence == NULL) {
-			perror("Failed to reallocate memory");
-			exit(1);
-		}
-		strcat(fullSentence, text);
-    	}
+// Function to safely append text to the dynamic list fullSentence
+void appendToSentence(const char *text) {
+	if (text == NULL) return;
+       
+	size_t newLen = strlen(fullSentence) + strlen(text) + 1;
+	fullSentence = (char *)realloc(fullSentence, newLen * sizeof(char));
+	if (fullSentence == NULL) {
+		perror("Failed to reallocate memory");
+		exit(1);
+	}
+	strcat(fullSentence, text);
+}
 %}
 
-/* 	OPCIONES     */ 
+/* 	OPTIONS     */ 
 
 %option noyywrap
 
