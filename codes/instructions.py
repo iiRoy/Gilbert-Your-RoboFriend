@@ -1,3 +1,21 @@
+"""
+	STUDENTS INFORMATION:
+	
+		YACC, PYTHON MATRIX & LEX CODER:
+		Rodrigo López Guerra
+		A01737437
+
+		PYTHON MATRIX CODER:
+		Valter Alejandro Kuhne Hernandez
+		A01379392
+
+		LEX CODER:
+		Ximena Cantera Reséndiz
+		A01277310	
+
+	Internal CPU Developer
+"""
+
 import subprocess
 import sys
 
