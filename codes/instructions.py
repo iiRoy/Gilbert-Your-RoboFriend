@@ -19,9 +19,20 @@
 import subprocess
 import sys
 
+# Command-line argument for the matrix number
 num_matrix = int(sys.argv[1])
 
 def create_window_with_emojis(emoji_matrix, direction):
+    """
+    Creates a tkinter window to display the matrix with emojis.
+
+    Args:
+    - emoji_matrix (list): Matrix containing emojis.
+    - direction (int): Direction the robot is facing.
+
+    Returns:
+    - None
+    """
     # Convert matrix to string representation
     emoji_text = '\\n'.join([' '.join(row) for row in emoji_matrix])
 
@@ -49,6 +60,15 @@ except KeyboardInterrupt:
 """])
 
 def parse_assembly_line(line):
+    """
+    Parses an assembly line into command and value.
+
+    Args:
+    - line (str): Assembly line to be parsed.
+
+    Returns:
+    - tuple: Command and value.
+    """
     parts = line.strip().split(',') 
     if len(parts) != 2:
         raise ValueError('Invalid assembly line format')
@@ -62,6 +82,16 @@ def parse_assembly_line(line):
     return command, value
 
 def generate_matrix(instructions, matrix_size):
+    """
+    Generates a matrix based on the given instructions.
+
+    Args:
+    - instructions (list): List of commands and values.
+    - matrix_size (int): Size of the matrix.
+
+    Returns:
+    - tuple: Generated matrix and final direction.
+    """
     matrix = [['\U0001F333' for _ in range(matrix_size)] for _ in range(matrix_size)]
     x, y, direction = matrix_size - 1, 0, 180  # Set initial position to bottom left corner facing North
 
@@ -92,6 +122,7 @@ if __name__ == "__main__":
     matrix_size = 10  # Adjust the matrix size as needed
     instructions = []
 
+    # Read instructions from file
     with open("instructions.asm", "r") as file:
         for line in file:
             try:
@@ -100,6 +131,7 @@ if __name__ == "__main__":
             except ValueError as e:
                 print(f"Error: {e}")
 
+    # Generate matrix and display window
     matrix, direction = generate_matrix(instructions, matrix_size)
     create_window_with_emojis(matrix, direction)
 
