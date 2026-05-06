@@ -568,6 +568,16 @@ Common reasons for rejection:
 
 ---
 
+## Preview
+
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/dd86f500-d00f-4a19-a747-a274f8f98578" controls width="700">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
+---
+
 ## Generated Files
 
 After building and running the project, these files may be generated:
